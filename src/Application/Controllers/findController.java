@@ -1,24 +1,25 @@
 package Application.Controllers;
 
 import Application.DBconnect;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+public class findController {
 
-public class AddController {
-
-    public TextField idInput;
-    public TextField nameInput;
-    public DatePicker datePicker;
+    public Label nameLabel;
+    public Label dateLabel;
     public Label statusLabel;
+
+    public TextField idToFind;
 
     private Stage stage;
     private Scene scene;
@@ -32,15 +33,20 @@ public class AddController {
         stage.show();
     }
 
-
-    public void submitBtn(ActionEvent event) {
-        String ID = idInput.getText();
-        String name = nameInput.getText();
-        String date = datePicker.getValue().toString();
-        String status = DBconnect.insertStudentData(ID, name, date);
-
-        statusLabel.setText(status);
+    public void searchButton(ActionEvent event) throws Exception{
+        String ID = idToFind.getText();
+        ArrayList<String> l = new ArrayList<String>();
+        l = DBconnect.searchStudent(ID);
+        if(!l.isEmpty()){
+            nameLabel.setText((String)l.getFirst());
+            dateLabel.setText((String)l.getLast());
+        }
+        else{
+            statusLabel.setText("Invalid ID");
+        }
+        l.clear();
     }
+    
 
-
+    
 }
